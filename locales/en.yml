@@ -4,11 +4,11 @@ button:
   go: GO
   home: Home
   toggle_dark: Toggle dark mode
-  toggle_langs: Change languages
+  toggle_langs: Admin
 intro:
   desc: Opinionated Vite Starter Template
   dynamic-route: Demo of dynamic route
   hi: Hi, {name}!
   aka: Also known as
-  whats-your-name: What's your name?
+  whats-your-name: What's your phone?
 not-found: Not found

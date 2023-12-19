@@ -3,13 +3,7 @@ import { availableLocales, loadLanguageAsync } from '~/modules/i18n'
 
 const { t, locale } = useI18n()
 
-async function toggleLocales() {
-  // change to some real logic
-  const locales = availableLocales
-  const newLocale = locales[(locales.indexOf(locale.value) + 1) % locales.length]
-  await loadLanguageAsync(newLocale)
-  locale.value = newLocale
-}
+
 </script>
 
 <template>
@@ -22,15 +16,15 @@ async function toggleLocales() {
       <div i="carbon-sun dark:carbon-moon" />
     </button>
 
-    <a icon-btn :title="t('button.toggle_langs')" @click="toggleLocales()">
-      <div i-carbon-language />
-    </a>
+    <RouterLink icon-btn to="/adminLogin" :title="t('button.toggle_langs')" >
+      <div i-carbon-user-admin />
+    </RouterLink>
 
     <RouterLink icon-btn to="/about" :title="t('button.about')" data-test-id="about">
       <div i-carbon-dicom-overlay />
     </RouterLink>
 
-    <a icon-btn rel="noreferrer" href="https://github.com/antfu/vitesse" target="_blank" title="GitHub">
+    <a icon-btn rel="noreferrer" href="https://github.com/bing6749/express_delivery_system" target="_blank" title="GitHub">
       <div i-carbon-logo-github />
     </a>
   </nav>

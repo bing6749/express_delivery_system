@@ -2,12 +2,17 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "preserve",
-    "lib": ["DOM", "ESNext"],
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
     "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "node",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": [
+        "src/*"
+      ]
     },
     "resolveJsonModule": true,
     "types": [
@@ -16,7 +21,10 @@
       "vue/ref-macros",
       "vite-plugin-vue-layouts/client",
       "vite-plugin-pwa/client",
-      "unplugin-vue-macros/macros-global"
+      "unplugin-vue-macros/macros-global",
+      "node",
+      "@types/node",
+      "@types/mysql"
     ],
     "allowJs": true,
     "strict": true,
@@ -33,5 +41,12 @@
       "@vue-macros/volar/define-slots"
     ]
   },
-  "exclude": ["dist", "node_modules", "cypress"]
+  "devDependencies": {
+  "@types/mysql": "*"
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+    "cypress"
+  ]
 }
