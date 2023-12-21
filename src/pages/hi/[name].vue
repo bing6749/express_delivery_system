@@ -155,18 +155,7 @@ const openNotification = () => {
       </a-button>
     </p>
 
-    <template v-if="user.otherNames.length">
-      <p mt-4 text-sm>
-        <span opacity-75>{{ t('intro.aka') }}:</span>
-        <ul>
-          <li v-for="otherName in user.otherNames" :key="otherName">
-            <RouterLink :to="`/hi/${otherName}`" replace>
-              {{ otherName }}
-            </RouterLink>
-          </li>
-        </ul>
-      </p>
-    </template>
+
 
 
   </div>

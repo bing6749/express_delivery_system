@@ -33,7 +33,7 @@ async function submit(formState: FormState) {
     // dataList.value = res.data;
     console.log(res.data)
     if (res.data === 0) {
-      router.push(`/admin`)
+      router.push('/admin')
     }
     // bool = res.data[0].user_phone !== undefined;
   });

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { availableLocales, loadLanguageAsync } from '~/modules/i18n'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 
 </script>
