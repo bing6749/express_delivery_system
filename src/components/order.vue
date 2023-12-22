@@ -1,6 +1,8 @@
 <template>
     <a-segmented v-model:value="dateValue" :options="dateData" @change="dataChange" />
   <a-button class="editable-add-btn" style="margin-bottom: 8px;margin-left: 50px" @click="handleAdd">新增订单</a-button>
+  <a-statistic title="Account Balance (CNY)" :precision="2" :value="accountBalance" />
+
 
   <!--  对话框-->
   <a-modal v-model:open="open" title="寄件信息填写" @ok="handleOk">
@@ -50,6 +52,7 @@ import API from "~/api/requests";
 // import { cloneDeep } from 'lodash-es';
 
 const searchValue = ref<string>('');
+const accountBalance = ref<number>(0);
 const dateData = reactive(['All', 'Daily', 'Weekly', 'Monthly', 'Quarterly', 'Yearly']);
 const dateValue = ref(dateData[0]);
 function dataChange(){
@@ -64,6 +67,7 @@ async function findOrder(count: string) {
     data: {count: count},
   }).then((res) => {
     dataSource.value = res.data;
+    accountBalance.value = dataSource.value.reduce((acc, cur) => acc + cur.price, 0);
   });
 }
 

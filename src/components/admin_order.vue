@@ -2,7 +2,14 @@
 <template>
   <p mt-10 ></p>
   <a-timeline text-left v-for="item in dataSource">
-    <a-timeline-item>上门地址：{{ item.send_address }}   ----------  预约时间：{{ item.appointment_time }} ------------ 电话：18399999999 </a-timeline-item>
+    <a-timeline-item>上门地址：{{ item.send_address }}   ----------  预约时间：{{ dayjs(item.appointment_time).format('YYYY-MM-DD HH:mm:ss') }}
+      <a-statistic-countdown
+        :value="item.appointment_time"
+        style="margin-right: 50px"
+      />
+      电话：18399999999
+    </a-timeline-item>
+
   </a-timeline>
 </template>
 
@@ -17,19 +24,7 @@ interface DataItem {
   phone: string;
 }
 const dataSource: Ref<DataItem[]> = ref([
-    {
-        send_address: "浙江万里学院钱湖校区28幢",
-        appointment_time: dayjs(),
-        phone: '17777777777',
-    },{
-        send_address: "浙江万里学院钱湖校区28幢",
-        appointment_time: dayjs(),
-        phone: '17777777777',
-    },{
-        send_address: "浙江万里学院钱湖校区28幢",
-        appointment_time: dayjs(),
-        phone: '17777777777',
-    },
+
 ]);
 //get上门取件信息
 async function getSignPackageInfo() {
@@ -39,11 +34,14 @@ async function getSignPackageInfo() {
     }).then((res) => {
         console.log(res)
         dataSource.value = res.data;
+      // 对 dataSource 按 appointment_time 排序
+      dataSource.value.sort((a, b) => new Date(a.appointment_time).getTime() - new Date(b.appointment_time).getTime());
     });
-
 }
+
 onMounted(()=>{
     getSignPackageInfo()
+
 })
 </script>
 
