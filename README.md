@@ -1,218 +1,126 @@
-<p align='center'>
-  <img src='https://user-images.githubusercontent.com/11247099/154486817-f86b8f20-5463-4122-b6e9-930622e757f2.png' alt='Vitesse - Opinionated Vite Starter Template' width='600'/>
-</p>
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
+  <h3 align="center">express_delivery_system</h3>
 
-<p align='center'>
-Mocking up web app with <b>Vitesse</b><sup><em>(speed)</em></sup><br>
-</p>
+  <p align="center">
+    一个轻量级的校园快递管理系统小项目
+    <br />
+    <a href="https://github.com/bing6749/express_delivery_system"><strong>跳转到项目 »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/bing6749/express_delivery_system">展示模板</a>
+    ·
+    <a href="https://github.com/bing6749/express_delivery_system/issues">反馈 Bug</a>
+    ·
+    <a href="https://github.com/bing6749/express_delivery_system/issues">提供需求</a>
+  </p>
 
-<br>
+<!-- ABOUT THE PROJECT -->
 
-<p align='center'>
-<a href="https://vitesse.netlify.app/">Live Demo</a>
-</p>
+## 项目概况
 
-<br>
+![view](https://s2.loli.net/2023/12/22/UyugT1bVYnWweDS.jpg)
 
-> **Note**: This template is created during the early transition of Vue 3 and Vite. At this moment, if you are seeking for better Vue developer experience and more consistent maintenance, we recommend using [Nuxt 3](https://nuxt.com) instead (it also works perfectly with SPA or SSG as needed). This template still serves as a reference, but expect slower updates.
+这是一个非常轻量化的校园快递管理系统，欢迎您使用它。
 
-<br>
+优势:
 
-<p align='center'>
-<b>English</b> | <a href="https://github.com/antfu/vitesse/blob/main/README.zh-CN.md">简体中文</a>
-<!-- Contributors: Thanks for getting interested, however we DON'T accept new translations to the README, thanks. -->
-</p>
+- 这个项目非常轻量化，没有繁重的SpringBoot，只有前端的Vue和nodejs
+- 你可以根据README很轻松的跑起来本项目，前提只是需要你的电脑上安装了一个高版本的node
+- 你可以很容易的修改代码，代码功能非常简洁，没有鉴权没有复杂的交互，仅有最直白的数据传递
+- 你可以很容易以本项目为基础完成你的课程设计 :smile:
 
-<br>
+使用 `README.md` 去运行项目.
 
-## Features
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- ⚡️ [Vue 3](https://github.com/vuejs/core), [Vite](https://github.com/vitejs/vite), [pnpm](https://pnpm.io/), [esbuild](https://github.com/evanw/esbuild) - born with fastness
+### 构建方式
 
-- 🗂 [File based routing](./src/pages)
+以下是本项目用于引导项目的主要框架/库
 
-- 📦 [Components auto importing](./src/components)
+- Vue3
+- TypeScript
+- pnpm
+- node.js
+- Vite
+- Vitesse
 
-- 🍍 [State Management via Pinia](https://pinia.vuejs.org/)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- 📑 [Layout system](./src/layouts)
+## 如何启动
 
-- 📲 [PWA](https://github.com/antfu/vite-plugin-pwa)
+这是一个示例，说明如何在本地设置项目。
 
-- 🎨 [UnoCSS](https://github.com/antfu/unocss) - the instant on-demand atomic CSS engine
+要启动并运行本地副本，请执行以下简单的示例步骤。
 
-- 😃 [Use icons from any icon sets with classes](https://github.com/antfu/unocss/tree/main/packages/preset-icons)
+### 前提
 
-- 🌍 [I18n ready](./locales)
+首先你要确保你的电脑有安装Node.( Node >=14.18 )
 
-- 🔎 [Component Preview](https://github.com/johnsoncodehk/vite-plugin-vue-component-preview)
+### 安装
 
-- 🗒 [Markdown Support](https://github.com/unplugin/unplugin-vue-markdown)
+本项目需要安装前端、后端以及配置数据库
 
-- 🔥 Use the [new `<script setup>` syntax](https://github.com/vuejs/rfcs/pull/227)
+1. 克隆到本地
 
-- 📥 [APIs auto importing](https://github.com/antfu/unplugin-auto-import) - use Composition API and others directly
+   ```sh
+   git clone https://github.com/bing6749/express_delivery_system.git
+   ```
 
-- 🖨 Static-site generation (SSG) via [vite-ssg](https://github.com/antfu/vite-ssg)
+2. 安装包
+   ```sh
+   cd express_delivery_system
+   pnpm install
+   ```
+3. 安装后端依赖
 
-- 🦔 Critical CSS via [critters](https://github.com/GoogleChromeLabs/critters)
+   ```sh
+   cd /express_delivery_back
+   pnpm install
+   ```
 
-- 🔤 [Webfont self-hosting](https://github.com/feat-agency/vite-plugin-webfont-dl)
+4. 配置数据库环境（mysql8为例）
 
-- 🦾 TypeScript, of course
+   ```
+   配置成自己的： /express_delivery_back/db/db.js
+   导入数据库的结构与数据：~/school_post.sql
+   ```
 
-- ⚙️ Unit Testing with [Vitest](https://github.com/vitest-dev/vitest), E2E Testing with [Cypress](https://cypress.io/) on [GitHub Actions](https://github.com/features/actions)
+5. 启动
 
-- ☁️ Deploy on Netlify, zero-config
+   ```sh
+   cd /express_delivery_back
+   pnpm run dev
+   cd /express_delivery_back
+   pnpm run start
+   ```
 
-<br>
+<!-- USAGE EXAMPLES -->
 
-## Pre-packed
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### UI Frameworks
+## 使用
 
-- [UnoCSS](https://github.com/antfu/unocss) - The instant on-demand atomic CSS engine.
+部署完成就以可以访问并使用 [http://localhost:3333](http://localhost:3333/)
 
-### Icons
+更多功能展示
 
-- [Iconify](https://iconify.design) - use icons from any icon sets [🔍Icônes](https://icones.netlify.app/)
-- [Pure CSS Icons via UnoCSS](https://github.com/antfu/unocss/tree/main/packages/preset-icons)
+![admin_login](https://s2.loli.net/2023/12/22/NJkBbr1ZdCVn3qW.jpg)
 
-### Plugins
+![package](https://s2.loli.net/2023/12/22/ZqJ7BUkPOywhzu5.jpg)
 
-- [Vue Router](https://github.com/vuejs/router)
-  - [`unplugin-vue-router`](https://github.com/posva/unplugin-vue-router) - file system based routing
-  - [`vite-plugin-vue-layouts`](https://github.com/JohnCampionJr/vite-plugin-vue-layouts) - layouts for pages
-- [Pinia](https://pinia.vuejs.org) - Intuitive, type safe, light and flexible Store for Vue using the composition api
-- [`unplugin-vue-components`](https://github.com/antfu/unplugin-vue-components) - components auto import
-- [`unplugin-auto-import`](https://github.com/antfu/unplugin-auto-import) - Directly use Vue Composition API and others without importing
-- [`unplugin-vue-macros`](https://github.com/sxzz/unplugin-vue-macros) - Explore and extend more macros and syntax sugar to Vue.
-- [`vite-plugin-pwa`](https://github.com/antfu/vite-plugin-pwa) - PWA
-- [`unplugin-vue-markdown`](https://github.com/antfu/unplugin-vue-markdown) - Markdown as components / components in Markdown
-  - [`markdown-it-shikiji`](https://github.com/antfu/shikiji) - [Shiki](https://github.com/antfu/shikiji) for syntax highlighting
-- [Vue I18n](https://github.com/intlify/vue-i18n-next) - Internationalization
-  - [`unplugin-vue-i18n`](https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n) - unplugin for Vue I18n
-- [VueUse](https://github.com/antfu/vueuse) - collection of useful composition APIs
-- [`vite-ssg-sitemap`](https://github.com/jbaubree/vite-ssg-sitemap) - Sitemap generator
-- [`@vueuse/head`](https://github.com/vueuse/head) - manipulate document head reactively
-- [`vite-plugin-webfont-dl`](https://github.com/feat-agency/vite-plugin-webfont-dl) - Zero-config webfont (Google Fonts) downloader and injector to improve website's performance.
-- [`vite-plugin-vue-devtools`](https://github.com/webfansplz/vite-plugin-vue-devtools) - Designed to enhance the Vue developer experience.
+![order](https://s2.loli.net/2023/12/22/XasQdgFwvh3HpIk.jpg)
 
-### Coding Style
+![user](https://s2.loli.net/2023/12/22/EpTaGqxtURSjrdV.jpg)
 
-- Use Composition API with [`<script setup>` SFC syntax](https://github.com/vuejs/rfcs/pull/227)
-- [ESLint](https://eslint.org/) with [@antfu/eslint-config](https://github.com/antfu/eslint-config), single quotes, no semi.
+<p align="right">(<a href="#readme-top">back to top</a>)
 
-### Dev tools
+<!-- LICENSE -->
 
-- [TypeScript](https://www.typescriptlang.org/)
-- [Vitest](https://github.com/vitest-dev/vitest) - Unit testing powered by Vite
-- [Cypress](https://cypress.io/) - E2E testing
-- [pnpm](https://pnpm.js.org/) - fast, disk space efficient package manager
-- [`vite-ssg`](https://github.com/antfu/vite-ssg) - Static-site generation
-  - [critters](https://github.com/GoogleChromeLabs/critters) - Critical CSS
-- [Netlify](https://www.netlify.com/) - zero-config deployment
-- [VS Code Extensions](./.vscode/extensions.json)
-  - [Vite](https://marketplace.visualstudio.com/items?itemName=antfu.vite) - Fire up Vite server automatically
-  - [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) - Vue 3 `<script setup>` IDE support
-  - [Iconify IntelliSense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify) - Icon inline display and autocomplete
-  - [i18n Ally](https://marketplace.visualstudio.com/items?itemName=lokalise.i18n-ally) - All in one i18n support
-  - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+## License
 
-## Variations
+本项目仅供学习与交流，禁止私自贩卖与销售。如有问题可以再issues中发出提问。
 
-As this template is strongly opinionated, the following provides a curated list for community-maintained variations with different preferences and feature sets. Check them out as well. PR to add yours is also welcome!
-
-###### Official
-
-- [vitesse-lite](https://github.com/antfu/vitesse-lite) - Lightweight version of Vitesse
-- [vitesse-nuxt3](https://github.com/antfu/vitesse-nuxt3) - Vitesse for Nuxt 3
-- [vitesse-nuxt-bridge](https://github.com/antfu/vitesse-nuxt-bridge) - Vitesse for Nuxt 2 with Bridge
-- [vitesse-webext](https://github.com/antfu/vitesse-webext) - WebExtension Vite starter template
-
-###### Community
-
-- [vitesse-ssr-template](https://github.com/frandiox/vitesse-ssr-template) by [@frandiox](https://github.com/frandiox) - Vitesse with SSR
-- [vitailse](https://github.com/zynth17/vitailse) by [@zynth17](https://github.com/zynth17) - Like Vitesse but with TailwindCSS
-- [vitesse-modernized-chrome-ext](https://github.com/xiaoluoboding/vitesse-modernized-chrome-ext) by [@xiaoluoboding](https://github.com/xiaoluoboding) - ⚡️ Modernized Chrome Extension Manifest V3 Vite Starter Template
-- [vitesse-stackter-clean-architect](https://github.com/shamscorner/vitesse-stackter-clean-architect) by [@shamscorner](https://github.com/shamscorner) - A modular clean architecture pattern in vitesse template
-- [vitesse-enterprise](https://github.com/FranciscoKloganB/vitesse-enterprise) by [@FranciscoKloganB](https://github.com/FranciscoKloganB) - Consistent coding styles regardless of team-size.
-- [vitecamp](https://github.com/nekobc1998923/vitecamp) by [@nekobc1998923](https://github.com/nekobc1998923) - Like Vitesse but without SSG/SSR/File based routing, includes Element Plus
-- [vitesse-h5](https://github.com/YunYouJun/vitesse-h5) by [@YunYouJun](https://github.com/YunYouJun) - Vitesse for Mobile
-- [bat](https://github.com/olgam4/bat) by [@olgam4](https://github.com/olgam4) - Vitesse for SolidJS
-- [vitesse-solid](https://github.com/xbmlz/vitesse-solid) by [@xbmlz](https://github.com/xbmlz) - Vitesse for SolidJS, build with [`SolidStart`](https://start.solidjs.com/), includes [UnoCSS](https://github.com/unocss/unocss) and [HopeUI](https://hope-ui.com/).
-
-## Try it now!
-
-> Vitesse requires Node >=14.18
-
-### GitHub Template
-
-[Create a repo from this template on GitHub](https://github.com/antfu/vitesse/generate).
-
-### Clone to local
-
-If you prefer to do it manually with the cleaner git history
-
-```bash
-npx degit antfu/vitesse my-vitesse-app
-cd my-vitesse-app
-pnpm i # If you don't have pnpm installed, run: npm install -g pnpm
-```
-
-## Checklist
-
-When you use this template, try follow the checklist to update your info properly
-
-- [ ] Change the author name in `LICENSE`
-- [ ] Change the title in `App.vue`
-- [ ] Change the hostname in `vite.config.ts`
-- [ ] Change the favicon in `public`
-- [ ] Remove the `.github` folder which contains the funding info
-- [ ] Clean up the READMEs and remove routes
-
-And, enjoy :)
-
-## Usage
-
-### Development
-
-Just run and visit http://localhost:3333
-
-```bash
-pnpm dev
-```
-
-### Build
-
-To build the App, run
-
-```bash
-pnpm build
-```
-
-And you will see the generated file in `dist` that ready to be served.
-
-### Deploy on Netlify
-
-Go to [Netlify](https://app.netlify.com/start) and select your clone, `OK` along the way, and your App will be live in a minute.
-
-### Docker Production Build
-
-First, build the vitesse image by opening the terminal in the project's root directory.
-
-```bash
-docker buildx build . -t vitesse:latest
-```
-
-Run the image and specify port mapping with the `-p` flag.
-
-```bash
-docker run --rm -it -p 8080:80 vitesse:latest
-```
-
-## Why
-
-I have created several Vite apps recently. Setting the configs up is kinda the bottleneck for me to make the ideas simply come true within a very short time.
-
-So I made this starter template for myself to create apps more easily, along with some good practices that I have learned from making those apps. It's strongly opinionated, but feel free to tweak it or even maintain your own forks. [(see community maintained variation forks)](#variations)
+<p align="right">(<a href="#readme-top">back to top</a>)
