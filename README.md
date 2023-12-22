@@ -1,9 +1,10 @@
 <div>
+  <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
   <h3 align="center">express_delivery_system</h3>
-
+</div>
   <p align="center">
     一个轻量级的校园快递管理系统小项目
     <br />
