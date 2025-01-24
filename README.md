@@ -60,6 +60,30 @@
 
 首先你要确保你的电脑有安装Node.( Node >=14.18 )
 
+### 管理员账号注册
+
+出于安全考虑，管理员注册接口需要特殊密钥才能访问。可以使用以下方法注册管理员账号：
+
+1. PowerShell 方式：
+
+```powershell
+$body = '{"username":"admin","password":"123456"}'
+Invoke-RestMethod -Method Post -Uri "http://localhost:3066/api/admin/register" -ContentType "application/json" -Headers @{"x-admin-secret"="express_delivery"} -Body $body
+```
+
+2. curl.exe 方式：
+
+```bash
+curl.exe -X POST http://localhost:3066/api/admin/register -H "Content-Type: application/json" -H "x-admin-secret: express_delivery" -d "{\"username\":\"admin\",\"password\":\"123456\"}"
+```
+
+注意：
+
+- 密钥默认为 "express_delivery"
+- 用户名至少3个字符
+- 密码至少6个字符
+- 注册成功后可以使用该账号密码登录管理后台
+
 ### 安装
 
 本项目需要安装前端、后端以及配置数据库

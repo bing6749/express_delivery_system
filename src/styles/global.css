@@ -1,0 +1,31 @@
+/* 主要按钮样式 */
+.ant-btn-primary {
+  background-color: #1677ff !important;
+  border-color: #1677ff !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: #4096ff !important;
+  border-color: #4096ff !important;
+}
+
+/* 默认按钮样式 */
+.ant-btn {
+  border-color: #d9d9d9 !important;
+}
+
+.ant-btn:hover {
+  border-color: #4096ff !important;
+  color: #4096ff !important;
+}
+
+/* Search按钮样式 */
+.ant-btn-primary.ant-input-search-button {
+  background-color: #1677ff !important;
+  border-color: #1677ff !important;
+}
+
+.ant-btn-primary.ant-input-search-button:hover {
+  background-color: #4096ff !important;
+  border-color: #4096ff !important;
+} 

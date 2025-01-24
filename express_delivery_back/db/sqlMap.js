@@ -16,6 +16,7 @@ var sqlMap = {
     },
     admin:{
         select: 'select * from admin',
+        register: 'insert into admin (admin_name, password, create_time) values (?, ?, ?)'
     },
     order:{
         select: 'select * from `order`',
