@@ -1,86 +1,147 @@
-const models = require('../db/db');
-const express = require('express');
-const router = express.Router();
-const mysql = require('mysql');
-const $sql = require('../db/sqlMap');
+const express = require('express')
+const mysql = require('mysql')
+const dayjs = require('dayjs')
+const models = require('../db/db')
+const $sql = require('../db/sqlMap')
 // import Result from '../result/result';
-const Result = require('../result/result');
+// const Result = require('../result/result')
 
+const router = express.Router()
 
-const conn = mysql.createConnection(models.mysql);
-conn.connect();
+const conn = mysql.createConnection(models.mysql)
+conn.connect()
 
 // 登录接口
-router.post('/login',(req,res)=>{
-	const user = req.body;
-	const sel_email = $sql.user.select + " where email = '" + user.email + "'";
-	console.log(sel_email);
-	conn.query(sel_email, user.email, (error, results)=>{
-		console.log(results)
-		if (results[0] === undefined) {
-			res.send("-1");  // -1 表示查询不到，用户不存在，即邮箱填写错误
-		} else{
-			if (results[0].email == user.email && results[0].password == user.password) {
-				res.send("0");  // 0 表示用户存在并且邮箱密码正确
-			} else{
-				res.send("1");  // 1 表示用户存在，但密码不正确
-			}
-		}
-	})
-});
+router.post('/login', (req, res) => {
+  const user = req.body
+  const sel_email = `${$sql.user.select} where email = '${user.email}'`
+  conn.query(sel_email, user.email, (error, results) => {
+    if (error)
+      return res.status(500).json({ error: error.message })
+
+    if (results[0] === undefined) {
+      res.send('-1') // -1 表示查询不到，用户不存在，即邮箱填写错误
+    }
+    else {
+      if (results[0].email === user.email && results[0].password === user.password)
+        res.send('0') // 0 表示用户存在并且邮箱密码正确
+      else
+        res.send('1') // 1 表示用户存在，但密码不正确
+    }
+  })
+})
 // 登录
-router.get('/getUser',(req,res)=>{
-	conn.query($sql.user.select,(err,results)=>{
+router.get('/getUser', (req, res) => {
+  conn.query($sql.user.select, (err, results) => {
+    if (err)
+      return res.status(500).json({ error: err.message })
 
-		if (err){
-			console.log(err)
-			res.send(results)
-		}
-		else{
-			res.send(results)
-		}
-	})
-});
-//根据手机号查找用户
-router.post('/getUserByPhoneNumber',(req,res)=>{
-	const user = req.body
-	conn.query($sql.user.select + " where user_phone = '" + user.user_phone+ "'",(err,results)=>{
+    res.send(results)
+  })
+})
+// 根据手机号查找用户
+router.post('/getUserByPhoneNumber', (req, res) => {
+  const user = req.body
+  conn.query(`${$sql.user.select} where user_phone = '${user.user_phone}'`, (err, results) => {
+    if (err)
+      return res.status(500).json({ error: err.message })
 
-		if (err){
-
-			console.log(err)
-			res.send(results)
-		}
-		else{
-			// console.log(results[0])
-			res.send(results)
-		}
-	})
-});
+    res.send(results)
+  })
+})
 // 注册接口
 router.post('/add', (req, res) => {
-	const params = req.body;
-	const sel_sql = $sql.user.select + " where username = '" + params.username + "'";
-	const add_sql = $sql.user.add;
-	console.log(sel_sql);
-	
-	conn.query(sel_sql, params.username, (error, results) => {
-		if(error) {
-			console.log(err);
-		}
-		if (results.length != 0 && params.username == results[0].username) {
-			res.send("-1");   // -1 表示用户名已经存在
-		} else {
-			conn.query(add_sql, [params.username, params.email, params.password], (err, rst) => {
-				if (err) {
-					console.log(err);
-				} else{
-					console.log(rst);
-					res.send("0"); // 0 表示用户创建成功
-				}
-			});
-		}
-	});
-});
+  const params = req.body
+  const sel_sql = `${$sql.user.select} where username = '${params.username}'`
+  const add_sql = $sql.user.add
 
-module.exports = router;
+  conn.query(sel_sql, params.username, (error, results) => {
+    if (error)
+      return res.status(500).json({ error: error.message })
+
+    if (results.length !== 0 && params.username === results[0].username) {
+      res.send('-1') // -1 表示用户名已经存在
+    }
+    else {
+      conn.query(add_sql, [params.username, params.email, params.password], (err, _rst) => {
+        if (err) {
+          return res.status(500).json({
+            code: 500,
+            message: err.message,
+          })
+        }
+        res.send('0') // 0 表示用户创建成功
+      })
+    }
+  })
+})
+
+// 检查并添加用户
+router.post('/checkAndAddUser', async (req, res) => {
+  const { user_phone } = req.body
+
+  try {
+    // 先检查用户是否存在
+    const checkSql = $sql.user.selectUserIdByUserPhone
+    conn.query(checkSql, [user_phone], (err, results) => {
+      if (err) {
+        console.error('查询用户错误:', err)
+        return res.status(500).json({
+          code: 500,
+          message: '数据库查询错误',
+        })
+      }
+
+      if (results.length > 0) {
+        // 用户已存在，返回用户ID
+        return res.json({
+          code: 200,
+          message: '用户已存在',
+          data: {
+            user_id: results[0].user_id,
+          },
+        })
+      }
+
+      // 用户不存在，添加新用户
+      const addSql = $sql.user.addUserByPhone
+      const currentTime = dayjs().format('YYYY-MM-DD')
+      conn.query(addSql, [user_phone, currentTime], (err, result) => {
+        if (err) {
+          console.error('添加用户错误:', err)
+          // 如果是主键冲突，说明用户已存在
+          if (err.code === 'ER_DUP_ENTRY') {
+            return res.json({
+              code: 200,
+              message: '用户已存在',
+              data: {
+                user_id: result.insertId,
+              },
+            })
+          }
+          return res.status(500).json({
+            code: 500,
+            message: '添加用户失败',
+          })
+        }
+
+        res.json({
+          code: 200,
+          message: '用户添加成功',
+          data: {
+            user_id: result.insertId,
+          },
+        })
+      })
+    })
+  }
+  catch (error) {
+    console.error('服务器错误:', error)
+    res.status(500).json({
+      code: 500,
+      message: '服务器错误',
+    })
+  }
+})
+
+module.exports = router

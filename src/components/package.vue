@@ -1,69 +1,34 @@
-<template>
-  <a-input-search
-    v-model:value="searchValue"
-    placeholder="search phone"
-    enter-button="Search"
-    style="width: 200px"
-    @search="onSearch"
-  />
-  <a-button class="editable-add-btn"  style="margin-bottom: 8px;margin-left: 50px" @click="handleAdd">入库</a-button>
-
-<!--  对话框-->
-  <a-modal v-model:open="open" title="入库单" @ok="handleOk">
-    <a-form
-      :model="formState"
-      name="nest-messages"
-      :validate-messages="validateMessages"
-    >
-      <a-form-item :name="['consignee']" label="收件人" :rules="[{ required: true }]">
-        <a-input v-model:value="formState.consignee" />
-      </a-form-item>
-      <a-form-item :name="['consignee_phone']" label="收件人手机号" :rules="[{ required: true }]">
-        <a-input v-model:value="formState.consignee_phone" />
-      </a-form-item>
-      <a-form-item :name="['package_address']" label="收件地址" :rules="[{ required: true }]">
-        <a-input v-model:value="formState.package_address" />
-      </a-form-item>
-      <a-form-item :name="['package_code']" label="收件码">
-        <a-input v-model:value="formState.package_code" />
-      </a-form-item>
-    </a-form>
-  </a-modal>
-  <a-table bordered :data-source="dataSource" :columns="columns">
-    <template #bodyCell="{ column, text, record }">
-<!--      <template v-if="column.dataIndex === 'name'">-->
-<!--        <div class="editable-cell">-->
-<!--          <div v-if="editableData[record.key]" class="editable-cell-input-wrapper">-->
-<!--            <a-input v-model:value="editableData[record.key].name" @pressEnter="save(record.key)" />-->
-<!--            <check-outlined class="editable-cell-icon-check" @click="save(record.key)" />-->
-<!--          </div>-->
-<!--          <div v-else class="editable-cell-text-wrapper">-->
-<!--            {{ text || ' ' }}-->
-<!--            <edit-outlined class="editable-cell-icon" @click="edit(record.key)" />-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </template>-->
-      <template v-if="column.dataIndex === 'status'">
-        <a-popconfirm
-          v-if="dataSource.length"
-          title="Sure to sign?"
-          @confirm="onSign(record.package_id)"
-        >
-          <a>Sign</a>
-        </a-popconfirm>
-      </template>
-    </template>
-  </a-table>
-</template>
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
-import type { Ref, UnwrapRef } from 'vue';
-import { CheckOutlined, EditOutlined } from '@ant-design/icons-vue';
-import API from "~/api/requests";
+import { ref } from 'vue'
+import type { Ref } from 'vue'
+import { message } from 'ant-design-vue'
+import dayjs from 'dayjs'
+import API from '~/api/requests'
+
 // import { cloneDeep } from 'lodash-es';
 
-const searchValue = ref<string>('');
-//根据手机尾号搜索快递
+interface DataItem {
+  package_id: number
+  package_code: string
+  package_address: string
+  consignee: string
+  consignee_phone: string
+  status: number
+}
+
+const dataSource: Ref<DataItem[]> = ref([
+  {
+    package_id: 1,
+    package_code: '0',
+    package_address: 'Edward King 0',
+    consignee: '32',
+    consignee_phone: 'London, Park Lane no. 0',
+    status: 1,
+  },
+])
+
+const searchValue = ref<string>('')
+// 根据手机尾号搜索快递
 async function findPackageByPhone(phone: string) {
   await API({
     url: '/package/findPackageByPhone',
@@ -72,36 +37,35 @@ async function findPackageByPhone(phone: string) {
       user_phone: phone,
     },
   }).then((res) => {
-    dataSource.value = res.data;
-  });
+    dataSource.value = res.data
+  })
 }
-//根据package_id签收包裹
+// 根据package_id签收包裹
 async function signPackageById(package_id: number) {
-  await API({
-    url: '/package/signPackageById',
-    method: 'post',
-    data: {
-      package_id: package_id,
-    },
-  }).then((res) => {
-    console.log(res)
-  });
+  try {
+    const res = await API({
+      url: '/package/signPackageById',
+      method: 'post',
+      data: {
+        package_id,
+      },
+    })
+    if (res.data.code === 200)
+      message.success('签收成功')
+    else
+      message.error('签收失败')
+  }
+  catch (error) {
+    message.error(`签收失败: ${error.message}`)
+  }
 }
-const onSearch = (searchValue: string) => {
-  findPackageByPhone(searchValue);
-};
+function onSearch(searchValue: string) {
+  findPackageByPhone(searchValue)
+}
 
-onMounted(()=>{
+onMounted(() => {
   findPackageByPhone('')
 })
-interface DataItem {
-  package_id: number;
-  package_code: string;
-  package_address: string;
-  consignee: string;
-  consignee_phone: string;
-  status: number;
-}
 
 const columns = [
   {
@@ -130,17 +94,9 @@ const columns = [
     title: '签收',
     dataIndex: 'status',
   },
-];
-const dataSource: Ref<DataItem[]> = ref([
-  {
-    package_id: 1,
-    package_code: '0',
-    package_address: 'Edward King 0',
-    consignee: '32',
-    consignee_phone: 'London, Park Lane no. 0',
-    status: 1,
-  }
-]);
+]
+
+const formRef = ref()
 const formState: Ref<DataItem> = ref(
   {
     package_code: '12-3-4444',
@@ -148,8 +104,8 @@ const formState: Ref<DataItem> = ref(
     consignee: '马睿',
     consignee_phone: '17777777777',
     status: 0,
-  }
-);
+  },
+)
 // const count = computed(() => dataSource.value.length + 1);
 // const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
 //
@@ -161,43 +117,128 @@ const formState: Ref<DataItem> = ref(
 //   delete editableData[key];
 // };
 
-const onSign = (key: string) => {
-  console.log(key)
+function onSign(key: string) {
   signPackageById(key)
   findPackageByPhone('')
-  // dataSource.value = dataSource.value.filter(item => item.key !== key);
-};
-const handleAdd = () => {
+}
+function handleAdd() {
   showModal()
-};
-const open = ref<boolean>(false);
+}
+const open = ref<boolean>(false)
 
-const showModal = () => {
-  open.value = true;
-};
+function showModal() {
+  open.value = true
+}
 
-//对话框提交
-const handleOk = (e: MouseEvent) => {
-  console.log(formState.value);
+// 对话框提交
+function handleOk(_e: MouseEvent) {
   addPackage()
-  open.value = false;
-};
-//根据formState对话框内容提交
+  open.value = false
+}
+// 根据formState对话框内容提交
 async function addPackage() {
-  await API({
-    url: '/package/addPackage',
-    method: 'post',
-    data: {
-      consignee: formState.value.consignee,
-      consignee_phone: formState.value.consignee_phone,
-      package_address: formState.value.package_address,
-      package_code: formState.value.package_code,
-    },
-  }).then((res) => {
-    console.log(res)
-  });
+  try {
+    // 先检查收件人手机号
+    if (!formState.value.consignee_phone) {
+      message.error('请输入收件人手机号')
+      return
+    }
+
+    // 检查并添加收件人
+    const userRes = await API({
+      url: '/user/checkAndAddUser',
+      method: 'post',
+      data: {
+        user_phone: String(formState.value.consignee_phone),
+      },
+    })
+
+    if (userRes.data.code !== 200) {
+      message.error('收件人信息处理失败')
+      return
+    }
+
+    // 提交包裹信息
+    const res = await API({
+      url: '/package/add',
+      method: 'post',
+      data: {
+        package_code: formState.value.package_code,
+        package_address: formState.value.package_address,
+        consignee: formState.value.consignee,
+        consignee_phone: formState.value.consignee_phone,
+        consignee_address: '温州商学院',
+        status: 0,
+        create_time: dayjs().format('YYYY-MM-DD'),
+      },
+    })
+
+    if (res.data.code === 200) {
+      message.success('包裹入库成功')
+      // 重置表单
+      formRef.value?.resetFields()
+      // 刷新数据
+      await findPackageByPhone('')
+    }
+    else {
+      message.error('包裹入库失败')
+    }
+  }
+  catch (error) {
+    message.error(`入库错误: ${error.message}`)
+  }
 }
 </script>
+
+<template>
+  <a-input-search
+    v-model:value="searchValue"
+    placeholder="search phone"
+    enter-button="Search"
+    style="width: 200px"
+    @search="onSearch"
+  />
+  <a-button class="editable-add-btn" style="margin-bottom: 8px;margin-left: 50px" @click="handleAdd">
+    入库
+  </a-button>
+
+  <!--  对话框 -->
+  <a-modal v-model:open="open" title="入库单" @ok="handleOk">
+    <a-form
+      ref="formRef"
+      :model="formState"
+      name="nest-messages"
+      :validate-messages="validateMessages"
+    >
+      <a-form-item :name="['consignee']" label="收件人" :rules="[{ required: true }]">
+        <a-input v-model:value="formState.consignee" />
+      </a-form-item>
+      <a-form-item :name="['consignee_phone']" label="收件人手机号" :rules="[{ required: true }]">
+        <a-input v-model:value="formState.consignee_phone" />
+      </a-form-item>
+      <a-form-item :name="['package_address']" label="收件地址" :rules="[{ required: true }]">
+        <a-input v-model:value="formState.package_address" />
+      </a-form-item>
+      <a-form-item :name="['package_code']" label="收件码">
+        <a-input v-model:value="formState.package_code" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
+  <a-table bordered :data-source="dataSource" :columns="columns">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.dataIndex === 'status'">
+        <a-popconfirm
+          v-if="dataSource.length"
+          title="Sure to sign?"
+          @confirm="onSign(record.package_id)"
+        >
+          <a>Sign</a>
+        </a-popconfirm>
+      </template>
+    </template>
+  </a-table>
+</template>
+
 <style  scoped>
 .editable-cell {
   position: relative;
