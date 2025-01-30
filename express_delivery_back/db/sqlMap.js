@@ -7,7 +7,7 @@ const sqlMap = {
   },
   package: {
     select: 'select * from package',
-    sign: 'update package set status = 1',
+    sign: 'update package set status = 1, update_time = NOW() where status = 0',
     add: 'insert into package (package_code, package_address, consignee, consignee_phone, consignee_address, status, create_time) values (?, ?, ?, ?, ?, ?, ?)',
   },
   adminOrder: {

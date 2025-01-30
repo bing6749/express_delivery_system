@@ -43,9 +43,16 @@ router.post('/findPackageByPhone', (req, res) => {
 // 根据package_id签收包裹signPackageById
 router.post('/signPackageById', (req, res) => {
   const params = req.body
-  const sel_sql = `${$sql.package.sign} where package_id = '${params.package_id}'`
+  if (!params.package_id) {
+    return res.status(400).json({
+      code: 400,
+      message: '包裹ID不能为空',
+    })
+  }
 
-  conn.query(sel_sql, (err, results) => {
+  const update_sql = `${$sql.package.sign} and package_id = ?`
+
+  conn.query(update_sql, [params.package_id], (err, result) => {
     if (err) {
       return res.status(500).json({
         code: 500,
@@ -53,9 +60,21 @@ router.post('/signPackageById', (req, res) => {
       })
     }
 
-    res.send(results)
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        code: 404,
+        message: '包裹不存在或已签收',
+      })
+    }
+
+    res.json({
+      code: 200,
+      message: '签收成功',
+      data: result,
+    })
   })
-})// 增加package
+})
+// 增加package
 router.post('/add', (req, res) => {
   const params = req.body
   const add_sql = $sql.package.add

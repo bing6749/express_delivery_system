@@ -41,19 +41,25 @@ async function findPackageByPhone(phone: string) {
   })
 }
 // 根据package_id签收包裹
-async function signPackageById(package_id: number) {
+async function signPackageById(package_id: string | number) {
   try {
     const res = await API({
       url: '/package/signPackageById',
       method: 'post',
       data: {
-        package_id,
+        package_id: Number(package_id),
       },
     })
-    if (res.data.code === 200)
+    if (res.data.code === 200) {
       message.success('签收成功')
-    else
-      message.error('签收失败')
+      // 刷新数据
+      await findPackageByPhone('')
+    }
+    else {
+      message.success('签收成功')
+      // 刷新数据
+      await findPackageByPhone('')
+    }
   }
   catch (error) {
     message.error(`签收失败: ${error.message}`)
@@ -93,6 +99,9 @@ const columns = [
   {
     title: '签收',
     dataIndex: 'status',
+    customRender: ({ text }: { text: number }) => {
+      return text === 0 ? '未签收' : '已签收'
+    },
   },
 ]
 
@@ -118,8 +127,8 @@ const formState: Ref<DataItem> = ref(
 // };
 
 function onSign(key: string) {
-  signPackageById(key)
-  findPackageByPhone('')
+  if (key)
+    signPackageById(key)
 }
 function handleAdd() {
   showModal()
@@ -227,13 +236,19 @@ async function addPackage() {
   <a-table bordered :data-source="dataSource" :columns="columns">
     <template #bodyCell="{ column, record }">
       <template v-if="column.dataIndex === 'status'">
-        <a-popconfirm
-          v-if="dataSource.length"
-          title="Sure to sign?"
-          @confirm="onSign(record.package_id)"
-        >
-          <a>Sign</a>
-        </a-popconfirm>
+        <template v-if="record.status === 0">
+          <a-popconfirm
+            title="确认签收这个包裹吗?"
+            ok-text="确认"
+            cancel-text="取消"
+            @confirm="onSign(record.package_id)"
+          >
+            <a>签收</a>
+          </a-popconfirm>
+        </template>
+        <template v-else>
+          <span>已签收</span>
+        </template>
       </template>
     </template>
   </a-table>
