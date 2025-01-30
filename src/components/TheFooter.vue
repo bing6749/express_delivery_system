@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { availableLocales, loadLanguageAsync } from '~/modules/i18n'
-
 const { t } = useI18n()
-
-
 </script>
 
 <template>
@@ -16,7 +12,7 @@ const { t } = useI18n()
       <div i="carbon-sun dark:carbon-moon" />
     </button>
 
-    <RouterLink icon-btn to="/adminLogin" :title="t('button.toggle_langs')" >
+    <RouterLink icon-btn to="/admin" :title="t('button.toggle_langs')">
       <div i-carbon-user-admin />
     </RouterLink>
 

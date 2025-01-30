@@ -1,13 +1,12 @@
 <script setup lang="ts">
 // const route = useRoute('/adminLogin')
 import { reactive, ref } from 'vue'
-import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import { Modal, message } from 'ant-design-vue'
 import API from '~/api/requests'
 
 const router = useRouter()
-const [messageApi, contextHolder] = message.useMessage()
+const [_messageApi, contextHolder] = message.useMessage()
 
 interface FormState {
   username: string
@@ -23,7 +22,7 @@ const formState = reactive<FormState>({
 
 const loading = ref(false)
 
-async function onFinish(values: FormState) {
+async function onFinish(_values: FormState) {
   try {
     loading.value = true
     // 表单验证
@@ -47,6 +46,8 @@ async function onFinish(values: FormState) {
     if (res.data.code === 200) {
       // 保存 token
       localStorage.setItem('token', res.data.data.token)
+      // 保存用户名
+      localStorage.setItem('username', res.data.data.admin.username)
       Modal.success({
         title: '登录成功',
         content: '欢迎回来！',
@@ -100,8 +101,7 @@ async function onFinish(values: FormState) {
   }
 }
 
-function onFinishFailed(errorInfo: any) {
-  console.log('Failed:', errorInfo)
+function onFinishFailed(_errorInfo: any) {
   Modal.error({
     title: '表单验证失败',
     content: '请检查输入是否符合要求',

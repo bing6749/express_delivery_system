@@ -1,7 +1,7 @@
-
-
 <script setup lang="ts">
+import { message } from 'ant-design-vue'
 import API from '../api/requests'
+
 defineOptions({
   name: 'IndexPage',
 })
@@ -9,27 +9,23 @@ const user = useUserStore()
 const name = ref(user.savedName)
 
 const router = useRouter()
-
-
-import { message } from 'ant-design-vue';
-const [messageApi, contextHolder] = message.useMessage();
+const [messageApi, contextHolder] = message.useMessage()
 
 async function isCorrectPhoneNumber(user_phone: string): boolean {
-  let bool = true;
-  await API({
-    url:'/user/getUserByPhoneNumber',
-    method:'post',
-    data: {
-      user_phone: user_phone
-    }
-  }).then((res)=>{
-    console.log(!res.data[0]);
-    if (!res.data[0]) {
-      bool = false;
-    }
-    // bool = res.data[0].user_phone !== undefined;
-  });
-  return bool;
+  try {
+    const res = await API({
+      url: '/user/getUserByPhoneNumber',
+      method: 'post',
+      data: {
+        user_phone,
+      },
+    })
+    return !!res.data[0]
+  }
+  catch (error) {
+    console.error('检查手机号错误:', error)
+    return false
+  }
 }
 
 async function go() {
@@ -38,13 +34,14 @@ async function go() {
     messageApi.info('请键入你正确的手机号！')
   else
     await router.push(`/hi/${encodeURIComponent(name.value)}`)
+}
 
-}
-function isPhoneNumber(phoneNumber: string): boolean {
-  const regExp = /^1[3-9]\d{9}$/;
-  return regExp.test(phoneNumber);
-}
 const { t } = useI18n()
+
+function _isPhoneNumber(phoneNumber: string): boolean {
+  const regExp = /^1[3-9]\d{9}$/
+  return regExp.test(phoneNumber)
+}
 </script>
 
 <template>
@@ -53,8 +50,7 @@ const { t } = useI18n()
       <div i-carbon-campsite inline-block />
     </div>
     <p>
-
-  <context-holder />
+      <context-holder />
     </p>
     <p>
       <em text-sm opacity-75>键入你的手机号</em>
@@ -62,14 +58,13 @@ const { t } = useI18n()
 
     <div py-4 />
 
-
     <TheInput
       v-model="name"
       :placeholder="t('intro.whats-your-name')"
       autocomplete="false"
       @keydown.enter="go"
     />
-    <label class="hidden" for="input" >{{ t('intro.whats-your-name') }}</label>
+    <label class="hidden" for="input">{{ t('intro.whats-your-name') }}</label>
 
     <div>
       <button
@@ -81,7 +76,6 @@ const { t } = useI18n()
       </button>
     </div>
   </div>
-
 </template>
 
 <route lang="yaml">
