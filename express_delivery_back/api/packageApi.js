@@ -8,12 +8,12 @@ const router = express.Router()
 const conn = mysql.createConnection(models.mysql)
 conn.connect()
 
-// 注册接口
+// 根据手机号查找包裹
 router.post('/getPackageByUserPhone', (req, res) => {
   const params = req.body
-  const sel_sql = `${$sql.package.select} where consignee_phone = '${params.user_phone}'`
+  const sel_sql = `${$sql.package.select} where status = 0 and consignee_phone = ?`
 
-  conn.query(sel_sql, (err, results) => {
+  conn.query(sel_sql, [params.user_phone], (err, results) => {
     if (err) {
       return res.status(500).json({
         code: 500,
@@ -27,9 +27,9 @@ router.post('/getPackageByUserPhone', (req, res) => {
 // 手机号模糊查找包裹
 router.post('/findPackageByPhone', (req, res) => {
   const params = req.body
-  const sel_sql = `${$sql.package.select} where status = 0 and consignee_phone like '%${params.user_phone}%'`
+  const sel_sql = `${$sql.package.select} where status = 0 and consignee_phone like ?`
 
-  conn.query(sel_sql, (err, results) => {
+  conn.query(sel_sql, [`%${params.user_phone}%`], (err, results) => {
     if (err) {
       return res.status(500).json({
         code: 500,

@@ -144,4 +144,77 @@ router.post('/checkAndAddUser', async (req, res) => {
   }
 })
 
+// 发送验证码
+router.post('/sendVerifyCode', (req, res) => {
+  const { phone } = req.body
+
+  // TODO: 实际项目中应该对接短信服务商
+  // 这里模拟发送验证码，固定返回123456
+  res.json({
+    code: 200,
+    message: '验证码发送成功',
+    data: {
+      code: '123456',
+    },
+  })
+})
+
+// 手机号登录
+router.post('/loginByPhone', (req, res) => {
+  const { phone, code } = req.body
+
+  // TODO: 实际项目中应该验证验证码是否正确
+  // 这里简单判断验证码是否为123456
+  if (code !== '123456') {
+    return res.json({
+      code: 400,
+      message: '验证码错误',
+    })
+  }
+
+  // 查询或创建用户
+  const checkSql = $sql.user.selectUserIdByUserPhone
+  conn.query(checkSql, [phone], (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        code: 500,
+        message: err.message,
+      })
+    }
+
+    if (results.length > 0) {
+      // 用户存在，直接登录
+      return res.json({
+        code: 200,
+        message: '登录成功',
+        data: {
+          user_id: results[0].user_id,
+          phone,
+        },
+      })
+    }
+
+    // 用户不存在，创建新用户
+    const addSql = $sql.user.addUserByPhone
+    const currentTime = dayjs().format('YYYY-MM-DD')
+    conn.query(addSql, [phone, currentTime], (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          code: 500,
+          message: err.message,
+        })
+      }
+
+      res.json({
+        code: 200,
+        message: '登录成功',
+        data: {
+          user_id: result.insertId,
+          phone,
+        },
+      })
+    })
+  })
+})
+
 module.exports = router

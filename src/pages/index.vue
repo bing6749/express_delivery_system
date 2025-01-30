@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { message } from 'ant-design-vue'
 import API from '../api/requests'
+import PhoneLogin from '~/components/PhoneLogin.vue'
 
 defineOptions({
   name: 'IndexPage',
@@ -58,7 +59,9 @@ function _isPhoneNumber(phoneNumber: string): boolean {
 
     <div py-4 />
 
-    <TheInput
+    <PhoneLogin/>
+
+    <!-- <TheInput
       v-model="name"
       :placeholder="t('intro.whats-your-name')"
       autocomplete="false"
@@ -74,7 +77,7 @@ function _isPhoneNumber(phoneNumber: string): boolean {
       >
         确认
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 
