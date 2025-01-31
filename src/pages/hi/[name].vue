@@ -6,6 +6,7 @@ import PackageType from "~/models/package";
 import moment from "moment";
 import { SmileOutlined } from '@ant-design/icons-vue';
 import { notification } from 'ant-design-vue';
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute('/hi/[name]')
@@ -63,10 +64,10 @@ const columns = [
     title: '收件人',
     dataIndex: 'consignee',
   },
-  {
-    title: '手机号',
-    dataIndex: 'consignee_phone',
-  },
+  // {
+  //   title: '手机号',
+  //   dataIndex: 'consignee_phone',
+  // },
   {
     title: '收件地址',
     dataIndex: 'consignee_address',
@@ -116,6 +117,15 @@ const openNotification = () => {
     duration: 4,
   });
 };
+
+function handleBack() {
+  // 清除登录信息
+  localStorage.removeItem('token')
+  localStorage.removeItem('phone')
+  localStorage.removeItem('user_id')
+  // 返回登录页
+  router.push('/')
+}
 </script>
 
 <template>
@@ -149,7 +159,7 @@ const openNotification = () => {
 
       <a-button
         m="3 t6" text-sm btn
-        @click="router.back()"
+        @click="handleBack"
       >
         {{ t('button.back') }}
       </a-button>

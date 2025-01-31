@@ -66,6 +66,10 @@ async function handleLogin() {
     })
     if (res.data.code === 200) {
       message.success('登录成功')
+      // 存储用户信息和token
+      localStorage.setItem('token', res.data.data.token)
+      localStorage.setItem('user_id', res.data.data.user_id)
+      localStorage.setItem('phone', res.data.data.phone)
       // 跳转到首页
       router.push(`/hi/${encodeURIComponent(phoneNumber.value)}`)
     }

@@ -19,6 +19,23 @@ app.use(bodyParser.json())
 
 app.use(cors())
 
+// 不需要验证的路由
+const publicRoutes = [
+  '/api/user/loginByPhone',
+  '/api/user/sendVerifyCode',
+  '/api/package/getPackageByUserPhone',
+  '/api/package/findPackageByPhone',
+]
+
+// 验证中间件
+app.use((req, res, next) => {
+  if (publicRoutes.includes(req.path)) {
+    next()
+    return
+  }
+  authMiddleware(req, res, next)
+})
+
 // 设置跨域请求
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -30,10 +47,10 @@ app.all('*', (req, res, next) => {
 })
 
 app.use('/api/user', userApi)
-app.use('/api/package', authMiddleware, packageApi)
-app.use('/api/adminOrder', authMiddleware, adminOrderApi)
+app.use('/api/package', packageApi)
+app.use('/api/adminOrder', adminOrderApi)
 app.use('/api/admin', adminApi)
-app.use('/api/order', authMiddleware, orderApi)
+app.use('/api/order', orderApi)
 
 app.listen(3066)
 console.log('success')

@@ -6,10 +6,18 @@ import PhoneLogin from '~/components/PhoneLogin.vue'
 defineOptions({
   name: 'IndexPage',
 })
+
 const user = useUserStore()
 const name = ref(user.savedName)
-
 const router = useRouter()
+
+// 检查是否已登录
+onMounted(() => {
+  const phone = localStorage.getItem('phone')
+  if (phone)
+    router.push(`/hi/${encodeURIComponent(phone)}`)
+})
+
 const [messageApi, contextHolder] = message.useMessage()
 
 async function isCorrectPhoneNumber(user_phone: string): boolean {
@@ -59,7 +67,7 @@ function _isPhoneNumber(phoneNumber: string): boolean {
 
     <div py-4 />
 
-    <PhoneLogin/>
+    <PhoneLogin />
 
     <!-- <TheInput
       v-model="name"

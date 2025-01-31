@@ -1,6 +1,7 @@
 const express = require('express')
 const mysql = require('mysql')
 const dayjs = require('dayjs')
+const jwt = require('jsonwebtoken')
 const models = require('../db/db')
 const $sql = require('../db/sqlMap')
 // import Result from '../result/result';
@@ -125,11 +126,24 @@ router.post('/checkAndAddUser', async (req, res) => {
           })
         }
 
+        // 为新用户生成 token
+        const token = jwt.sign(
+          {
+            user_id: result.insertId,
+            phone: user_phone,
+            type: 'user',
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: '24h' },
+        )
+
         res.json({
           code: 200,
           message: '用户添加成功',
           data: {
             user_id: result.insertId,
+            phone: user_phone,
+            token,
           },
         })
       })
@@ -184,12 +198,22 @@ router.post('/loginByPhone', (req, res) => {
 
     if (results.length > 0) {
       // 用户存在，直接登录
+      const token = jwt.sign(
+        {
+          user_id: results[0].user_id,
+          phone,
+          type: 'user', // 标记为普通用户
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' },
+      )
       return res.json({
         code: 200,
         message: '登录成功',
         data: {
           user_id: results[0].user_id,
           phone,
+          token,
         },
       })
     }
@@ -205,12 +229,24 @@ router.post('/loginByPhone', (req, res) => {
         })
       }
 
+      // 为新用户生成 token
+      const token = jwt.sign(
+        {
+          user_id: result.insertId,
+          phone,
+          type: 'user',
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' },
+      )
+
       res.json({
         code: 200,
         message: '登录成功',
         data: {
           user_id: result.insertId,
           phone,
+          token,
         },
       })
     })
