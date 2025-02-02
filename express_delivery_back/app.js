@@ -25,6 +25,7 @@ const publicRoutes = [
   '/api/user/sendVerifyCode',
   '/api/package/getPackageByUserPhone',
   '/api/package/findPackageByPhone',
+  '/api/admin/login',
 ]
 
 // 验证中间件

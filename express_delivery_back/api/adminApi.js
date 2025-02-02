@@ -1,14 +1,14 @@
-const models = require('../db/db')
 const express = require('express')
-
-const router = express.Router()
 const mysql = require('mysql')
-const dayjs = require('dayjs')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const $sql = require('../db/sqlMap')
+const dayjs = require('dayjs')
 require('dotenv').config()
 
+const models = require('../db/db')
+const $sql = require('../db/sqlMap')
+
+const router = express.Router()
 const conn = mysql.createConnection(models.mysql)
 conn.connect()
 
@@ -66,7 +66,15 @@ router.post('/login', async (req, res) => {
 
       try {
         // 生成 token
-        const token = generateToken(results[0])
+        const token = jwt.sign(
+          {
+            admin_id: results[0].admin_id,
+            admin_name: results[0].admin_name,
+            isAdmin: true,
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: '24h' },
+        )
 
         res.json({
           code: 200,

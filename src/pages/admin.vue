@@ -50,6 +50,7 @@ function handleLogout() {
     onOk: () => {
       // 清除 token
       localStorage.removeItem('token')
+      localStorage.removeItem('username')
       // 跳转到登录页
       router.push('/adminLogin')
     },

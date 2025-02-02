@@ -21,6 +21,8 @@ const sqlMap = {
   order: {
     select: 'select * from `order`',
     add: 'insert into `order` (order_num, send_name, send_address,send_phone,send_company,consignee,consignee_phone,consignee_address,weight,price,create_time) values (?,?,?,?,?,?,?,?,?,?,?)',
+    addDeliveryOrder: 'INSERT INTO delivery_order (package_id, user_phone, delivery_address, status, create_time) VALUES (?, ?, ?, 0, NOW())',
+    getDeliveryOrders: 'SELECT d.*, p.package_code FROM delivery_order d LEFT JOIN package p ON d.package_id = p.package_id WHERE d.user_phone = ?',
   },
 }
 
