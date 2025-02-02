@@ -118,9 +118,13 @@ async function handleLogin() {
       <div class="agreement">
         <a-checkbox v-model:checked="agreed">
           我已阅读并同意
-          <a href="#" target="_blank">用户协议</a>
+          <router-link to="/about?type=agreement">
+            用户协议
+          </router-link>
           与
-          <a href="#" target="_blank">隐私政策</a>
+          <router-link to="/about?type=privacy">
+            隐私政策
+          </router-link>
           ，未注册的手机号将自动注册
         </a-checkbox>
       </div>

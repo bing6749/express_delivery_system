@@ -96,6 +96,8 @@ const open = ref<boolean>(false)
 const paymentModalVisible = ref<boolean>(false)
 const currentPackage = ref<PackageType | null>(null)
 const deliveryFee = 2 // 配送费用，单位：元
+const deliveryAddress = ref<string>('')
+
 
 function showModal() {
   open.value = true
@@ -183,7 +185,7 @@ async function handlePaymentConfirm() {
       data: {
         package_id: currentPackage.value.package_id,
         user_phone: user.savedName,
-        delivery_address: currentPackage.value.consignee_address,
+        delivery_address: deliveryAddress.value,
       },
     })
 
@@ -299,8 +301,8 @@ function handlePaymentCancel() {
   >
     <div class="payment-info">
       <p>配送费用：{{ deliveryFee }}元</p>
-      <p>配送地址：{{ currentPackage?.consignee_address }}</p>
       <p>取件码：{{ currentPackage?.package_code }}</p>
+      <a-input v-model:value="deliveryAddress" placeholder="请输入配送地址" style="width: 50%;" />
       <div class="payment-qrcode">
         <img src="\images\qr-code.png" alt="支付二维码">
         <p>请使用支付宝或微信扫码支付</p>

@@ -93,4 +93,62 @@ router.post('/addDeliveryOrder', (req, res) => {
   })
 })
 
+// 查询配送订单
+router.post('/findDeliveryOrders', async (req, res) => {
+  const { timeRange } = req.body
+  let timeCondition = ''
+
+  switch (timeRange) {
+    case 'Daily':
+      timeCondition = 'AND DATE(create_time) = CURDATE()'
+      break
+    case 'Weekly':
+      timeCondition = 'AND create_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)'
+      break
+    case 'Monthly':
+      timeCondition = 'AND create_time >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)'
+      break
+    case 'Quarterly':
+      timeCondition = 'AND create_time >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)'
+      break
+    case 'Yearly':
+      timeCondition = 'AND create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)'
+      break
+    default:
+      timeCondition = ''
+  }
+
+  const sql = `
+    SELECT d.*, p.package_code 
+    FROM delivery_order d
+    LEFT JOIN package p ON d.package_id = p.package_id
+    WHERE 1=1 ${timeCondition}
+    ORDER BY create_time DESC
+  `
+
+  try {
+    conn.query(sql, (err, results) => {
+      if (err) {
+        console.error('查询配送订单错误:', err)
+        return res.status(500).json({
+          code: 500,
+          message: '查询失败',
+        })
+      }
+
+      res.json({
+        code: 200,
+        data: results,
+      })
+    })
+  }
+  catch (error) {
+    console.error('查询配送订单失败:', error)
+    res.status(500).json({
+      code: 500,
+      message: '查询失败',
+    })
+  }
+})
+
 module.exports = router

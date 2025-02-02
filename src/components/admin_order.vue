@@ -7,7 +7,7 @@
         :value="item.appointment_time"
         style="margin-right: 50px"
       />
-      电话：18399999999
+      电话：{{item.user_phone}}
     </a-timeline-item>
 
   </a-timeline>

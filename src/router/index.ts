@@ -36,6 +36,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('~/pages/dashboard.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/about',
+    name: 'About',
+    component: () => import('~/pages/about.vue'),
+    meta: { requiresAuth: false },
+  },
   // ... 其他路由
 ]
 
