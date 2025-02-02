@@ -193,4 +193,84 @@ router.post('/register', async (req, res) => {
   }
 })
 
+// 获取仪表盘统计数据
+router.get('/statistics', async (req, res) => {
+  try {
+    const queries = {
+      totalPackages: 'SELECT COUNT(*) as count FROM package',
+      todayPackages: 'SELECT COUNT(*) as count FROM package WHERE DATE(create_time) = CURDATE()',
+      totalOrders: 'SELECT COUNT(*) as count FROM `order`',
+      totalUsers: 'SELECT COUNT(*) as count FROM user',
+      // 快递公司占比
+      companyStats: 'SELECT send_company as name, COUNT(*) as value FROM `order` GROUP BY send_company',
+      // 近7天包裹统计
+      weeklyStats: `
+        SELECT 
+          DATE(create_time) as date,
+          COUNT(*) as count 
+        FROM package 
+        WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        GROUP BY DATE(create_time)
+        ORDER BY date
+      `,
+      // 月度订单趋势
+      monthlyStats: `
+        SELECT 
+          MONTH(create_time) as month,
+          COUNT(*) as count 
+        FROM \`order\` 
+        WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+        GROUP BY MONTH(create_time)
+        ORDER BY month
+      `,
+    }
+
+    const results = await Promise.all(
+      Object.entries(queries).map(([key, query]) => {
+        return new Promise((resolve, reject) => {
+          conn.query(query, (err, result) => {
+            if (err)
+              reject(err)
+            resolve({ key, result })
+          })
+        })
+      }),
+    )
+
+    const data = results.reduce((acc, { key, result }) => {
+      if (['totalPackages', 'todayPackages', 'totalOrders', 'totalUsers'].includes(key)) {
+        acc[key] = result[0].count
+      }
+      else if (key === 'companyStats') {
+        acc.companyData = result
+      }
+      else if (key === 'weeklyStats') {
+        acc.weeklyData = {
+          dates: result.map(r => dayjs(r.date).format('MM-DD')),
+          values: result.map(r => r.count),
+        }
+      }
+      else if (key === 'monthlyStats') {
+        acc.monthlyData = {
+          months: result.map(r => `${r.month}月`),
+          values: result.map(r => r.count),
+        }
+      }
+      return acc
+    }, {})
+
+    res.json({
+      code: 200,
+      data,
+    })
+  }
+  catch (error) {
+    console.error('获取统计数据失败:', error)
+    res.status(500).json({
+      code: 500,
+      message: '获取统计数据失败',
+    })
+  }
+})
+
 module.exports = router

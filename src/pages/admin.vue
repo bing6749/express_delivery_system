@@ -7,14 +7,21 @@ import { Modal } from 'ant-design-vue'
 import Package from '~/components/package.vue'
 import Order from '~/components/order.vue'
 import Admin_order from '~/components/admin_order.vue'
+import Dashboard from '~/components/Dashboard.vue'
 
-const comName = shallowRef<string>(Package)
+const comName = shallowRef<string>(Dashboard)
 const handleClick: MenuProps['onClick'] = (e) => {
   comName.value = e.key
 }
 
-const current = ref<string[]>(['package'])
+const current = ref<string[]>(['dashboard'])
 const items = ref<MenuProps['items']>([
+  {
+    key: Dashboard,
+    icon: () => h(AppstoreOutlined),
+    label: '仪表盘',
+    title: 'dashboard',
+  },
   {
     key: Package,
     icon: () => h(MailOutlined),

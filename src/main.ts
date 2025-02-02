@@ -3,6 +3,7 @@ import { setupLayouts } from 'virtual:generated-layouts'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/reset.css'
 import { routes } from 'vue-router/auto/routes'
+import ECharts from './plugins/echarts'
 import type { UserModule } from './types'
 import App from './App.vue'
 import '@unocss/reset/tailwind.css'
@@ -24,6 +25,7 @@ export const createApp = ViteSSG(
     Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
       .forEach(i => i.install?.(ctx))
     ctx.app.use(Antd)
+    ctx.app.use(ECharts)
   },
 
 )

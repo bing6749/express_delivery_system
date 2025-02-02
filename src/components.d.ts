@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Admin_order: typeof import('./components/admin_order.vue')['default']
+    Dashboard: typeof import('./components/dashboard.vue')['default']
     Order: typeof import('./components/order.vue')['default']
     Package: typeof import('./components/package.vue')['default']
     PhoneLogin: typeof import('./components/PhoneLogin.vue')['default']
