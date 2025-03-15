@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { h, ref, shallowRef } from 'vue'
-import { AppstoreOutlined, CarOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons-vue'
+import { AppstoreOutlined, CarOutlined, MailOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons-vue'
 import type { MenuProps } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { Modal } from 'ant-design-vue'
@@ -9,6 +9,7 @@ import Order from '~/components/order.vue'
 import Admin_order from '~/components/admin_order.vue'
 import Dashboard from '~/components/Dashboard.vue'
 import DeliveryOrder from '~/components/delivery_order.vue'
+import MessageBoard from '~/components/MessageBoard.vue'
 
 const comName = shallowRef<string>(Dashboard)
 const handleClick: MenuProps['onClick'] = (e) => {
@@ -46,6 +47,12 @@ const items = ref<MenuProps['items']>([
     icon: () => h(CarOutlined),
     label: '送货上门',
     title: 'delivery_order',
+  },
+  {
+    key: MessageBoard,
+    icon: () => h(MessageOutlined),
+    label: '留言板',
+    title: 'message_board',
   },
 ])
 

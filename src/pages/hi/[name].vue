@@ -10,8 +10,11 @@ import { useRouter } from 'vue-router'
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
 import type PackageType from '~/models/package'
-import Package from '~/models/package'
+import PackageModel from '~/models/package'
 import API from '~/api/requests'
+import PackageComponent from '~/components/package.vue'
+import Admin_order from '~/components/admin_order.vue'
+import UserMessageBoard from '~/components/UserMessageBoard.vue'
 
 const router = useRouter()
 const route = useRoute('/hi/[name]')
@@ -98,6 +101,8 @@ const currentPackage = ref<PackageType | null>(null)
 const deliveryFee = 2 // 配送费用，单位：元
 const deliveryAddress = ref<string>('')
 
+// 添加留言板相关的状态
+const messageModalVisible = ref(false)
 
 function showModal() {
   open.value = true
@@ -214,6 +219,24 @@ function handlePaymentCancel() {
   paymentModalVisible.value = false
   currentPackage.value = null
 }
+
+const items = [
+  {
+    key: '1',
+    label: '我的包裹',
+    children: h(PackageComponent),
+  },
+  {
+    key: '2',
+    label: '上门取件',
+    children: h(Admin_order),
+  },
+  {
+    key: '3',
+    label: '我的留言',
+    children: h(UserMessageBoard),
+  },
+]
 </script>
 
 <template>
@@ -227,6 +250,15 @@ function handlePaymentCancel() {
     <p>
       <a-button m="3 t6" text-sm btn @click="showModal">
         寄包裹
+      </a-button>
+
+      <a-button
+        m="3 t6"
+        text-sm
+        btn
+        @click="messageModalVisible = true"
+      >
+        留言板
       </a-button>
 
       <a-modal v-model:open="open" width="1000px" title="预约上门取件" @ok="handleOk">
@@ -308,6 +340,16 @@ function handlePaymentCancel() {
         <p>请使用支付宝或微信扫码支付</p>
       </div>
     </div>
+  </a-modal>
+
+  <!-- 留言板模态框 -->
+  <a-modal
+    v-model:open="messageModalVisible"
+    title="留言板"
+    width="800px"
+    :footer="null"
+  >
+    <UserMessageBoard />
   </a-modal>
 </template>
 

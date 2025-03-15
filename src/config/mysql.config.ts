@@ -3,9 +3,9 @@ import mysql from 'mysql'
 // const mysql = require('mysql');
 
 const db = mysql.createConnection({
-  host: 'localhost',
+  host: '121.41.46.15',
   user: 'root',
-  password: '123456',
+  password: 'bing6749',
   database: 'school_post',
   port: 3306,
 })

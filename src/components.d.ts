@@ -10,6 +10,7 @@ declare module 'vue' {
     Admin_order: typeof import('./components/admin_order.vue')['default']
     Dashboard: typeof import('./components/dashboard.vue')['default']
     Delivery_order: typeof import('./components/delivery_order.vue')['default']
+    MessageBoard: typeof import('./components/MessageBoard.vue')['default']
     Order: typeof import('./components/order.vue')['default']
     Package: typeof import('./components/package.vue')['default']
     PhoneLogin: typeof import('./components/PhoneLogin.vue')['default']
@@ -19,5 +20,6 @@ declare module 'vue' {
     TheCounter: typeof import('./components/TheCounter.vue')['default']
     TheFooter: typeof import('./components/TheFooter.vue')['default']
     TheInput: typeof import('./components/TheInput.vue')['default']
+    UserMessageBoard: typeof import('./components/UserMessageBoard.vue')['default']
   }
 }

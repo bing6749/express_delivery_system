@@ -24,6 +24,12 @@ const sqlMap = {
     addDeliveryOrder: 'INSERT INTO delivery_order (package_id, user_phone, delivery_address, status, create_time) VALUES (?, ?, ?, 0, NOW())',
     getDeliveryOrders: 'SELECT d.*, p.package_code FROM delivery_order d LEFT JOIN package p ON d.package_id = p.package_id WHERE d.user_phone = ?',
   },
+  messageBoard: {
+    add: 'INSERT INTO message_board(user_phone, content) VALUES(?, ?)',
+    list: 'SELECT * FROM message_board',
+    reply: 'UPDATE message_board SET reply=?, reply_time=NOW(), status=1 WHERE message_id=?',
+    delete: 'DELETE FROM message_board WHERE message_id=?',
+  },
 }
 
 module.exports = sqlMap

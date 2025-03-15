@@ -11,6 +11,7 @@ const adminOrderApi = require('./api/adminOrderApi.js')
 const adminApi = require('./api/adminApi.js')
 const orderApi = require('./api/orderApi.js')
 const authMiddleware = require('./middleware/auth')
+const messageBoardApi = require('./api/messageBoardApi')
 
 // 解析 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -52,6 +53,7 @@ app.use('/api/package', packageApi)
 app.use('/api/adminOrder', adminOrderApi)
 app.use('/api/admin', adminApi)
 app.use('/api/order', orderApi)
+app.use('/api/messageBoard', messageBoardApi)
 
 app.listen(3066)
 console.log('success')
